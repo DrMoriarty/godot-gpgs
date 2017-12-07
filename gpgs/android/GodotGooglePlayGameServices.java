@@ -48,7 +48,7 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
             "isOnline", "isWifiConnected", "isMobileConnected",
             "saveSnapshot", "loadFromSnapshot",
             "unlockAchy", "incrementAchy", "showAchyList",
-            "leaderSubmit", "showLeaderList", "getLeaderboardValue",
+            "leaderSubmit", "showLeaderList", "showAllLeaderLists", "getLeaderboardValue",
             "invitePlayers", "showInvitationInbox", "sendReliableMessage", "sendBroadcastMessage", "leaveRoom"
         });
     }
@@ -277,6 +277,14 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
             return;
         }
         leaderboards.showLeaderList(id);
+    }
+
+    public void showAllLeaderLists() {
+        if (leaderboards == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
+        leaderboards.showAllLeaderLists();
     }
 
     /**

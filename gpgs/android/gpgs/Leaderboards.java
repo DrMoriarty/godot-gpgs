@@ -70,6 +70,19 @@ public class Leaderboards {
  		});
     }
 
+    public void showAllLeaderLists() {
+        if (googleApiClient == null || !googleApiClient.isConnected()) return;
+        activity.runOnUiThread(new Runnable() {
+ 			@Override
+            public void run() {
+ 				if (googleApiClient != null && googleApiClient.isConnected()) {
+ 					activity.startActivityForResult(Games.Leaderboards.getAllLeaderboardsIntent(googleApiClient), REQUEST_LEADERBOARD);
+                    Log.d(TAG, "GPGS: showAllLeaderLists.");
+ 				}
+ 			}
+ 		});
+    }
+
     public void getLeaderboardValue(final String id) {
         if (googleApiClient == null || !googleApiClient.isConnected()) return;
         activity.runOnUiThread(new Runnable() {
