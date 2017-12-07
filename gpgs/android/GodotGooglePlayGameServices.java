@@ -27,7 +27,7 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
     private Achievements achievements;
     private RealTimeMultiplayer realTimeMultiplayer;
 
-    private static final String TAG = "godot";
+    private static final String TAG = "GPGS";
 
     /**
      * Singleton
@@ -44,7 +44,7 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
     public GodotGooglePlayGameServices(Activity activity) {
         this.activity = activity;
         registerClass("GodotGooglePlayGameServices", new String[] {
-            "init", "signIn", "signOut", "getStatus",
+            "init", "signIn", "signOut", "getStatus", "silentSignIn", "isSignedIn",
             "isOnline", "isWifiConnected", "isMobileConnected",
             "saveSnapshot", "loadFromSnapshot",
             "unlockAchy", "incrementAchy", "showAchyList",
@@ -64,6 +64,7 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
         this.instance_id = instance_id;
         client = new Client(activity, googleApiClient, instance_id, this);
         network = new Network(activity);
+        Log.i(TAG, "GPGS Plugin inited");
     }
 
     public void setClient(GoogleApiClient googleApiClient) {
@@ -72,10 +73,12 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
         snapshots = new Snapshots(activity, googleApiClient, instance_id);
         achievements = new Achievements(activity, googleApiClient, instance_id);
         realTimeMultiplayer = new RealTimeMultiplayer(activity, googleApiClient, instance_id);
+        Log.i(TAG, "GPGS Client created");
     }
 
     @Override
     protected void onMainActivityResult(int request, int response, Intent intent) {
+        Log.i(TAG, "Get Activity result: "+request);
         switch(request) {
             case Client.RC_SIGN_IN:
             case Client.REQUEST_RESOLVE_ERROR:
@@ -95,7 +98,10 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * Sign In method
      */
     public void signIn() {
-        if (client == null) return;
+        if (client == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         client.signIn();
     }
 
@@ -103,7 +109,10 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * Sign Out method
      */
     public void signOut() {
-        if (client == null) return;
+        if (client == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         client.signOut();
     }
 
@@ -112,8 +121,27 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * @return int Return 1 for Conecting..., 2 for Connected, 0 in any other case
      */
     public int getStatus() {
-        if (client == null) return 0;
+        if (client == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return 0;
+        }
         return client.getStatus();
+    }
+
+    public void silentSignIn() {
+        if (client == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
+        client.silentSignIn();
+    }
+
+    public boolean isSignedIn() {
+        if (client == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return false;
+        }
+        return client.isSignedIn();
     }
 
     /* Network Methods
@@ -124,7 +152,10 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * @return boolean
      */
     public boolean isOnline() {
-        if (network == null) return false;
+        if (network == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return false;
+        }
         return network.isOnline();
     }
 
@@ -133,7 +164,10 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * @return boolean
      */
     public boolean isWifiConnected() {
-        if (network == null) return false;
+        if (network == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return false;
+        }
         return network.isWifiConnected();
     }
 
@@ -142,7 +176,10 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * @return boolean
      */
     public boolean isMobileConnected() {
-        if (network == null) return false;
+        if (network == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return false;
+        }
         return network.isMobileConnected();
     }
 
@@ -156,7 +193,10 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * @param String description The description for the snapshot
      */
     public void saveSnapshot(final String snapshotName, final String data, final String description) {
-        if (snapshots == null) return;
+        if (snapshots == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         snapshots.saveSnapshot(snapshotName, data, description);
     }
 
@@ -165,7 +205,10 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * @param String snapshotName The name of the snapshot
      */
     public void loadFromSnapshot(final String snapshotName) {
-        if (snapshots == null) return;
+        if (snapshots == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         snapshots.loadFromSnapshot(snapshotName);
     }
 
@@ -178,7 +221,10 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * @param int amount The amount for increment
      */
     public void incrementAchy(final String id, final int increment) {
-        if (achievements == null) return;
+        if (achievements == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         achievements.incrementAchy(id, increment);
     }
 
@@ -187,7 +233,10 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * @param String id Achivement to unlock
      */
     public void unlockAchy(final String id) {
-        if (achievements == null) return;
+        if (achievements == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         achievements.unlockAchy(id);
     }
 
@@ -195,7 +244,10 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * Show Achivements List
      */
     public void showAchyList() {
-        if (achievements == null) return;
+        if (achievements == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         achievements.showAchyList();
     }
 
@@ -208,7 +260,10 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * @param int score Score to upload to the leaderboard
      */
     public void leaderSubmit(final String id, final int score) {
-        if (leaderboards == null) return;
+        if (leaderboards == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         leaderboards.leaderSubmit(id, score);
     }
 
@@ -217,7 +272,10 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * @param String id Id of the leaderboard
      */
     public void showLeaderList(final String id) {
-        if (leaderboards == null) return;
+        if (leaderboards == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         leaderboards.showLeaderList(id);
     }
 
@@ -226,34 +284,52 @@ public class GodotGooglePlayGameServices extends Godot.SingletonBase {
      * @param String id Id of the leaderboard
      */
     public void getLeaderboardValue(final String id) {
-        if (leaderboards == null) return;
+        if (leaderboards == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         leaderboards.getLeaderboardValue(id);
     }
 
     /* Real Time Multiplayer Methods
      * ********************************************************************** */
     public void invitePlayers(final int min, final int max) {
-        if (realTimeMultiplayer == null) return;
+        if (realTimeMultiplayer == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         realTimeMultiplayer.invitePlayers(min, max);
     }
 
     public void showInvitationInbox() {
-        if (realTimeMultiplayer == null) return;
+        if (realTimeMultiplayer == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         realTimeMultiplayer.showInvitationInbox();
     }
 
     public void sendReliableMessage(String msg, String participantId) {
-        if (realTimeMultiplayer == null) return;
+        if (realTimeMultiplayer == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         realTimeMultiplayer.sendReliableMessage(msg, participantId);
     }
 
     public void sendBroadcastMessage(String msg) {
-        if (realTimeMultiplayer == null) return;
+        if (realTimeMultiplayer == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         realTimeMultiplayer.sendBroadcastMessage(msg);
     }
 
     public void leaveRoom() {
-        if (realTimeMultiplayer == null) return;
+        if (realTimeMultiplayer == null) {
+            Log.w(TAG, "GPGS not inited yet!");
+            return;
+        }
         realTimeMultiplayer.leaveRoom();
     }
 

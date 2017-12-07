@@ -3,6 +3,7 @@ def can_build(plat):
 
 def configure(env):
     if env['platform'] == 'android':
+        env.android_add_dependency("compile 'com.google.android.gms:play-services-auth:10.2.1'")
         env.android_add_dependency("compile 'com.google.android.gms:play-services-plus:10.2.1'")
         env.android_add_dependency("compile 'com.google.android.gms:play-services-drive:10.2.1'")
         env.android_add_dependency("compile 'com.google.android.gms:play-services-games:10.2.1'")
