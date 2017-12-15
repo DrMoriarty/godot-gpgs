@@ -168,26 +168,23 @@ public class Client {
                 case Client.REQUEST_RESOLVE_ERROR:
                     isResolvingConnectionFailure = false;
                     GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent);
-                    if(result.isSuccess()) {
-                        Log.i(TAG, "Login completed: "+result.getStatus().getStatusMessage()+" code: "+result.getStatus().getStatusCode());
-                        currentAccount = result.getSignInAccount();
-                        GodotLib.calldeferred(instance_id, "_on_google_play_game_services_connected", new Object[] { });
-                    } else {
-                        Log.w(TAG, "Login error: "+result.getStatus().getStatusMessage()+" code: "+result.getStatus().getStatusCode());
-                        if (isResolvingConnectionFailure) return; // Already resolving
-                        isResolvingConnectionFailure = true;
-                        currentAccount = null;
-                        if (!resolveSignInFailure(result, REQUEST_RESOLVE_ERROR)) {
-                            isResolvingConnectionFailure = false;
+                    if(result != null) {
+                        if(result.isSuccess()) {
+                            Log.i(TAG, "Login completed: "+result.getStatus().getStatusMessage()+" code: "+result.getStatus().getStatusCode());
+                            currentAccount = result.getSignInAccount();
+                            GodotLib.calldeferred(instance_id, "_on_google_play_game_services_connected", new Object[] { });
+                        } else {
+                            Log.w(TAG, "Login error: "+result.getStatus().getStatusMessage()+" code: "+result.getStatus().getStatusCode());
+                            if (isResolvingConnectionFailure) return; // Already resolving
+                            isResolvingConnectionFailure = true;
+                            currentAccount = null;
+                            if (!resolveSignInFailure(result, REQUEST_RESOLVE_ERROR)) {
+                                isResolvingConnectionFailure = false;
+                            }
+                            //GodotLib.calldeferred(instance_id, "_on_google_play_game_services_connection_failed", new Object[] { });
                         }
-                        //GodotLib.calldeferred(instance_id, "_on_google_play_game_services_connection_failed", new Object[] { });
                     }
                     break;
-                    //case Client.REQUEST_RESOLVE_ERROR:
-                    //isResolvingConnectionFailure = false;
-                    //if(!googleApiClient.isConnecting() && !googleApiClient.isConnected())
-                    //    googleApiClient.connect();
-                    //break;
             }
         //}
 	}

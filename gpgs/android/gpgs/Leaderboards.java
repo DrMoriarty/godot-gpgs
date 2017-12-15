@@ -33,6 +33,8 @@ public class Leaderboards {
 
     public void leaderSubmit(final String id, final int score) {
         if (googleApiClient == null || !googleApiClient.isConnected()) return;
+        Games.Leaderboards.submitScore(googleApiClient, id, score);
+        /*
  		activity.runOnUiThread(new Runnable() {
  			@Override
             public void run() {
@@ -55,6 +57,7 @@ public class Leaderboards {
                 Log.d(TAG, "GPGS: leaderSubmit '" + id + "' by " + score + ".");
  			}
  		});
+        */
  	}
 
     public void showLeaderList(final String id) {
