@@ -118,7 +118,7 @@ public class Client {
             } catch (IntentSender.SendIntentException e) {
                 // The intent was canceled before it was sent.  Return to the default
                 // state and attempt to connect to get an updated ConnectionResult.
-                googleApiClient.connect();
+                googleApiClient.connect(GoogleApiClient.SIGN_IN_MODE_OPTIONAL);
                 return false;
             }
         } else {
@@ -126,7 +126,7 @@ public class Client {
             int errorCode = result.getErrorCode();
 
             if (errorCode == ConnectionResult.INTERNAL_ERROR) {
-                googleApiClient.connect();
+                googleApiClient.connect(GoogleApiClient.SIGN_IN_MODE_OPTIONAL);
             }
 
             GodotLib.calldeferred(instance_id, "_on_google_play_game_services_connection_failed", new Object[] { });

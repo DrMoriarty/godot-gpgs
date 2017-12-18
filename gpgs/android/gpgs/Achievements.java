@@ -1,5 +1,6 @@
 package org.godotengine.godot.gpgs;
 
+import java.lang.IllegalStateException;
 import android.util.Log;
 import android.app.Activity;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -28,8 +29,12 @@ public class Achievements {
         activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Games.Achievements.increment(googleApiClient, id, increment);
-                Log.d(TAG, "GPGS: incrementAchy '" + id + "' by " + increment + ".");
+                try {
+                    Games.Achievements.increment(googleApiClient, id, increment);
+                    Log.d(TAG, "GPGS: incrementAchy '" + id + "' by " + increment + ".");
+                } catch (IllegalStateException e) {
+                    Log.e(TAG, e.toString());
+                }
             }
         });
     }
@@ -40,8 +45,12 @@ public class Achievements {
         {
             @Override
             public void run() {
-                Games.Achievements.unlock(googleApiClient, id);
-                Log.d(TAG, "GPGS: unlockAchy '" + id + "'.");
+                try {
+                    Games.Achievements.unlock(googleApiClient, id);
+                    Log.d(TAG, "GPGS: unlockAchy '" + id + "'.");
+                } catch (IllegalStateException e) {
+                    Log.e(TAG, e.toString());
+                }
             }
         });
     }
@@ -52,8 +61,12 @@ public class Achievements {
         {
             @Override
             public void run() {
-                activity.startActivityForResult(Games.Achievements.getAchievementsIntent(googleApiClient), REQUEST_ACHIEVEMENTS);
-                Log.d(TAG, "GPGS: showAchyList.");
+                try {
+                    activity.startActivityForResult(Games.Achievements.getAchievementsIntent(googleApiClient), REQUEST_ACHIEVEMENTS);
+                    Log.d(TAG, "GPGS: showAchyList.");
+                } catch (IllegalStateException e) {
+                    Log.e(TAG, e.toString());
+                }
             }
         });
     }
