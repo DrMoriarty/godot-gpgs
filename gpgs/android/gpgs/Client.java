@@ -60,7 +60,9 @@ public class Client {
     public void init() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
-            .requestScopes(Games.SCOPE_GAMES, Plus.SCOPE_PLUS_LOGIN, Drive.SCOPE_APPFOLDER)
+            .requestScopes(Games.SCOPE_GAMES)
+            .requestScopes(Plus.SCOPE_PLUS_LOGIN)
+            .requestScopes(Drive.SCOPE_APPFOLDER)
             .build();
         googleApiClient = new GoogleApiClient.Builder(activity).addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
             @Override
